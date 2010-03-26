@@ -1,0 +1,57 @@
+#!/bin/sh
+
+# For this django postactivate script to work you must add the following configuration variables to your django settings
+# PROJECT_DIR     = '/home/username/sites/example.com' # The root directory where your project is saved
+# PKG_DIR_LIST    = ['%s/third_party' % PROJECT_DIR]   # List of additional package directories you want to add to the python path
+# SETTINGS_MODULE = 'example.config.settings'          # The python path to your django settings
+# SERVER_ADDR     = '127.0.0.1'                        # Django Dev Server address (Not Required)
+# SERVER_PORT     = '8088'                             # Django Dev Server port (Not Required)
+# FABFILE         = '%s/bin/fabfile.py' % PROJECT_DIR  # Path to your fabric fabfile (Not Required)
+
+export PYTHONPATH=$VIRTUAL_ENV
+
+export DJANGO_PROJECT_DIR=$(python -c "from "`basename $VIRTUAL_ENV`".config import settings; print settings.PROJECT_DIR")
+export DJANGO_SETTINGS_MODULE=$(python -c "from "`basename $VIRTUAL_ENV`".config import settings; print settings.SETTINGS_MODULE")
+
+# set the DJANGO_SERVER_ADDR enviroment for running the djanog dev server (Not Required)
+if [ ! $(python -c "from "`basename $VIRTUAL_ENV`".config import settings; print settings.SERVER_ADDR") == "" ]; then
+	export DJANGO_SERVER_ADDR=$(python -c "from "`basename $VIRTUAL_ENV`".config import settings; print settings.SERVER_ADDR")
+fi
+
+# set the DJANGO_SERVER_PORT enviroment for running the djanog dev server (Not Required)
+if [ ! $(python -c "from "`basename $VIRTUAL_ENV`".config import settings; print settings.SERVER_ADDR") == "" ]; then
+	export DJANGO_SERVER_PORT=$(python -c "from "`basename $VIRTUAL_ENV`".config import settings; print settings.SERVER_PORT")
+fi
+
+# set up the PYTHONPATH
+if [[ ! "$(python -c 'from '`basename $VIRTUAL_ENV`'.config import settings; print ":".join(settings.ADDITIONAL_PYTHON_DIR_LIST)')" == "" ]]; then
+	export PYTHONPATH="$DJANGO_PROJECT_DIR:"$(python -c "from "`basename $VIRTUAL_ENV`".config import settings; print ':'.join(settings.ADDITIONAL_PYTHON_DIR_LIST)")
+else
+	export PYTHONPATH=$DJANGO_PROJECT_DIR
+fi
+
+# Add the django bin directory to our path
+export DJANGO_BIN_DIR=$(python -c "import sys, os; p=[p for p in sys.path if os.path.isdir('%s/django/bin' % p)]; print '%s/django/bin' % ''.join(p)")
+if [[ "$(echo $PATH | grep $DJANGO_BIN_DIR )" == "" ]]; then
+	export PATH="$DJANGO_BIN_DIR:$PATH"
+fi
+
+# Setup an alias to the fabfile.py so fab <command> workds from anywhere
+if [[ ! "$(python -c 'from '`basename $VIRTUAL_ENV`'.config import settings; print settings.FABFILE')" == "" ]]; then
+	alias fab='fab -f '$(python -c "from "`basename $VIRTUAL_ENV`".config import settings; print settings.FABFILE")
+fi
+	
+cd $DJANGO_PROJECT_DIR
+
+echo '
+
+Your virtualenv "'`basename $VIRTUAL_ENV`'" has been activated.
+
+Project Commands:
+runserver - Starts the Django dev server 
+fab <command> - Runs fabric commands located in the file $VIRTUAL_ENV/bin/fabfile.py 
+deactivate - Deactivates the current virtualenv 
+mate . - Loads the current project in TextMate
+workon <environment name> - Work on a different virtualenv project
+
+'

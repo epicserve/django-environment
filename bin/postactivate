@@ -17,14 +17,12 @@ DJANGO_SERVER_ADDR=$(python -c "from "`basename "$VIRTUAL_ENV"`".config import s
 DJANGO_SERVER_PORT=$(python -c "from "`basename "$VIRTUAL_ENV"`".config import settings; print getattr(settings, 'SERVER_PORT', '')")
 PKG_DIR_LIST=$(python -c "from "`basename $VIRTUAL_ENV`".config import settings; print ':'.join(getattr(settings, 'PKG_DIR_LIST', []))")
 FABFILE=$(python -c "from "`basename "$VIRTUAL_ENV"`".config import settings; print getattr(settings, 'FABFILE', '')")
-DJANGO_BIN_DIR=$(python -c "import sys, os; p=[p for p in sys.path if os.path.isdir('%s/django/bin' % p)]; print '%s/django/bin' % ''.join(p)")
 ACTIVATED_MSG='Your Django-environment "'`basename $VIRTUAL_ENV`'" has been activated.
 
 Django-environment Commands:
 runserver      Starts the Django development server 
 deactivate     Deactivates the current Django-environment 
 workon <name>  Work on a different Django-environment'
-
 
 export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
 
@@ -39,13 +37,14 @@ if [ -n "$DJANGO_SERVER_PORT" ]; then
 fi
 
 # set up the PYTHONPATH
-if [ -n "$DJANGO_PROJECT_DIR" ]; then
-	export PYTHONPATH="$DJANGO_PROJECT_DIR:$DJANGO_PROJECT_DIR"
+if [ -n "$PKG_DIR_LIST" ]; then
+	export PYTHONPATH="$PKG_DIR_LIST:$DJANGO_PROJECT_DIR"
 else
 	export PYTHONPATH=$DJANGO_PROJECT_DIR
 fi
 
 # Add the django bin directory to our path
+DJANGO_BIN_DIR=$(python -c "import sys, os; p=[p for p in sys.path if os.path.isdir('%s/django/bin' % p)]; print '%s/django/bin' % ''.join(p)")
 if [ -n "$DJANGO_BIN_DIR" ]; then
 	export DJANGO_BIN_DIR=$DJANGO_BIN_DIR
 	export PATH="$DJANGO_BIN_DIR:$PATH"

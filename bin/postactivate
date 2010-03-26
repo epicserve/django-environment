@@ -47,11 +47,10 @@ echo '
 
 Your virtualenv "'`basename $VIRTUAL_ENV`'" has been activated.
 
-Project Commands:
-runserver - Starts the Django dev server 
-fab <command> - Runs fabric commands located in the file $VIRTUAL_ENV/bin/fabfile.py 
-deactivate - Deactivates the current virtualenv 
-mate . - Loads the current project in TextMate
-workon <environment name> - Work on a different virtualenv project
+Django-environment Commands:
+runserver      Starts the Django dev server 
+fab <command>  Runs fabric commands located in the file $VIRTUAL_ENV/bin/fabfile.py 
+deactivate     Deactivates the current virtualenv 
+workon <name>  Work on a different virtualenv project
 
 '

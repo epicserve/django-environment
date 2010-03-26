@@ -1,6 +1,6 @@
 # Django-environment
 
-A plugin for virtualenv to easily create new django projects or bootstrap and existing projects.
+A plugin for virtualenv to easily create new django projects or bootstrap existing projects.
 
 This project is currently very experimental so feel free to use it with that understanding.
 

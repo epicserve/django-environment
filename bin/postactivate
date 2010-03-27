@@ -9,14 +9,12 @@
 # FABFILE         = '%s/bin/fabfile.py' % PROJECT_DIR  # Path to your fabric fabfile (Not Required)
 
 # this is needed so you can load your Django settings
-export PYTHONPATH=$VIRTUAL_ENV
 
-DJANGO_PROJECT_DIR=$(python -c "from "`basename "$VIRTUAL_ENV"`".config import settings; print getattr(settings, 'PROJECT_DIR', '')")
-DJANGO_SETTINGS_MODULE=$(python -c "from "`basename "$VIRTUAL_ENV"`".config import settings; print getattr(settings, 'SETTINGS_MODULE', '')")
-DJANGO_SERVER_ADDR=$(python -c "from "`basename "$VIRTUAL_ENV"`".config import settings; print getattr(settings, 'SERVER_ADDR', '')")
-DJANGO_SERVER_PORT=$(python -c "from "`basename "$VIRTUAL_ENV"`".config import settings; print getattr(settings, 'SERVER_PORT', '')")
-PKG_DIR_LIST=$(python -c "from "`basename $VIRTUAL_ENV`".config import settings; print ':'.join(getattr(settings, 'PKG_DIR_LIST', []))")
-FABFILE=$(python -c "from "`basename "$VIRTUAL_ENV"`".config import settings; print getattr(settings, 'FABFILE', '')")
+DJANGO_PROJECT_DIR=$(django_settings.py get_var DJANGO_PROJECT_DIR)
+DJANGO_SETTINGS_MODULE=$(django_settings.py get_var SETTINGS_MODULE)
+DJANGO_SERVER_ADDR=$(django_settings.py get_var SERVER_ADDR)
+DJANGO_SERVER_PORT=$(django_settings.py get_var SERVER_PORT)
+FABFILE=$(django_settings.py get_var FABFILE)
 ACTIVATED_MSG='Your Django-environment "'`basename $VIRTUAL_ENV`'" has been activated.
 
 Django-environment Commands:
@@ -33,21 +31,7 @@ fi
 
 # set the DJANGO_SERVER_PORT enviroment for running the djanog dev server (Not Required)
 if [ -n "$DJANGO_SERVER_PORT" ]; then
-	export DJANGO_SERVER_PORT=$(python -c "from "`basename $VIRTUAL_ENV`".config import settings; print settings.SERVER_PORT")
-fi
-
-# set up the PYTHONPATH
-if [ -n "$PKG_DIR_LIST" ]; then
-	export PYTHONPATH="$PKG_DIR_LIST:$DJANGO_PROJECT_DIR"
-else
-	export PYTHONPATH=$DJANGO_PROJECT_DIR
-fi
-
-# Add the django bin directory to our path
-DJANGO_BIN_DIR=$(python -c "import sys, os; p=[p for p in sys.path if os.path.isdir('%s/django/bin' % p)]; print '%s/django/bin' % ''.join(p)")
-if [ -n "$DJANGO_BIN_DIR" ]; then
-	export DJANGO_BIN_DIR=$DJANGO_BIN_DIR
-	export PATH="$DJANGO_BIN_DIR:$PATH"
+	export DJANGO_SERVER_PORT=$DJANGO_SERVER_PORT
 fi
 
 # Setup an alias to the fabfile.py so fab <command> workds from anywhere

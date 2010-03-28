@@ -1,5 +1,13 @@
+# Check to see if the user wants to install a Django environment
+echo -n "Is this a Django-enviroment your creating (y/n)? "
+read -e IS_DJANGO_ENV
+
+if [ $IS_DJANGO_ENV == "n" ]; then
+	exit 0
+fi
+
 # install django
-pip install /Users/oconnor/code/git/django-environment/Django-1.1.1.tar.gz
+pip install Django
 
 # setup the Django project directory
 PROJECT_NAME=`basename $VIRTUAL_ENV`
@@ -38,7 +46,7 @@ source $WORKON_HOME/django_env/bin/postdeactivate
 ' >> "$VIRTUAL_ENV/bin/postdeactivate"
 
 # fix the ROOT_URLCONF setting
-perl -i -wpe 's/temp\.urls/temp\.config.urls/g' "$DJANGO_ENV_PROJECT_DIR/$PROJECT_NAME/config/settings.py"
+perl -i -wpe "s/"$PROJECT_NAME"\.urls/"$PROJECT_NAME"\.config.urls/g" "$DJANGO_ENV_PROJECT_DIR/$PROJECT_NAME/config/settings.py"
 
 # add all paths to the PYTHONPATH
 add2virtualenv $DJANGO_ENV_PROJECT_DIR

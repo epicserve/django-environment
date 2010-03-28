@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+if [ -z "$DJANGO_SITES_ROOT" ]; then
+	
+echo '
+	
+Before you can install Django-environment you need to add the
+DJANGO_SITES_ROOT environment variable to either ~/.profile for OSX users or
+~/.bashrc for Linux users.
+
+Example of what to add:
+export DJANGO_SITES_ROOT=$HOME/Sites
+
+This determines where your Django project files will stored for your projects.
+	
+'
+
+exit 1
+
+fi
+
+
+cd ../
+ln -sf `pwd` "$WORKON_HOME/django_env"
+
+echo -e '\n\nsource $WORKON_HOME/django_env/bin/postmkvirtualenv\n' >> "$WORKON_HOME/postmkvirtualenv"
+
+echo "
+
+Django-environment is now installed. To create a django-environment run
+the following.
+
+mkvirtualenv [project_name]
+
+Example:
+mkvirtualenv example
+
+"

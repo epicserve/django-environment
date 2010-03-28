@@ -1,13 +1,8 @@
 #!/usr/bin/env bash
 
 # remove all enviroment variables prefixed with DJANGO
-if [ -n "$(env | grep DJANGO)" ]; then
-	for i in $(env | grep DJANGO | perl -lne "s/(django_[_a-z]+)=.+/\\1/ig; print;"); do unset $i; done
-fi
-
-# remove the PYTHONPATH
-if [ -n "$PYTHONPATH" ]; then
-	unset PYTHONPATH
+if [ -n "$(env | grep DJANGO_ENV)" ]; then
+	for i in $(env | grep DJANGO_ENV | perl -lne "s/(django_env[_a-z]+)=.+/\\1/ig; print;"); do unset $i; done
 fi
 
 # remove the alias to the fabfile.py for this project

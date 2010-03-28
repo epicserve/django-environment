@@ -1,0 +1,47 @@
+# install django
+pip install /Users/oconnor/code/git/django-environment/Django-1.1.1.tar.gz
+
+# setup the Django project directory
+PROJECT_NAME=`basename $VIRTUAL_ENV`
+DJANGO_ENV_PROJECT_DIR="$DJANGO_SITES_ROOT/$PROJECT_NAME.com"
+mkdir "$DJANGO_ENV_PROJECT_DIR"
+cd "$DJANGO_ENV_PROJECT_DIR"
+django-admin.py startproject $PROJECT_NAME
+
+cd "$DJANGO_ENV_PROJECT_DIR/$PROJECT_NAME"
+mkdir config
+mv *.py config/
+touch __init__.py
+cd config/
+touch __init__.py
+
+# Setup the local_settings.py
+LOCAL_SETTINGS="# Django-enviroment settings\nDJANGO_ENV_PROJECT_DIR     = '$DJANGO_ENV_PROJECT_DIR'\nDJANGO_ENV_SETTINGS_MODULE = '$PROJECT_NAME.config.settings'\nDJANGO_ENV_SERVER_ADDR     = '127.0.0.1'\nDJANGO_ENV_SERVER_PORT     = '8088'\nDJANGO_ENV_FABFILE         = ''\n"
+
+echo -e $LOCAL_SETTINGS > local_settings.py
+echo "from $PROJECT_NAME.config import local_settings" >> settings.py
+
+# symlink all bin files
+ln -s $WORKON_HOME/django_env/bin/runserver $VIRTUAL_ENV/bin/runserver
+ln -s $WORKON_HOME/django_env/utils/django_settings.py $VIRTUAL_ENV/bin/django_settings.py
+
+# add the postactivate and postdeactivate hooks
+echo '
+
+source $WORKON_HOME/django_env/bin/postactivate
+
+' >> "$VIRTUAL_ENV/bin/postactivate"
+echo '
+
+source $WORKON_HOME/django_env/bin/postdeactivate
+
+' >> "$VIRTUAL_ENV/bin/postdeactivate"
+
+# fix the ROOT_URLCONF setting
+perl -i -wpe 's/temp\.urls/temp\.config.urls/g' "$DJANGO_ENV_PROJECT_DIR/$PROJECT_NAME/config/settings.py"
+
+# add all paths to the PYTHONPATH
+add2virtualenv $DJANGO_ENV_PROJECT_DIR
+
+# source the Django-environment postactivate script
+source "$WORKON_HOME/django_env/bin/postactivate"

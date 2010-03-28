@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-if [ -n "$DJANGO_SERVER_ADDR" -a -n "$DJANGO_SERVER_PORT" ]; then
-	django-admin.py runserver $DJANGO_SERVER_ADDR:$DJANGO_SERVER_PORT
+if [ -n "$DJANGO_ENV_SERVER_ADDR" -a -n "$DJANGO_ENV_SERVER_PORT" ]; then
+	django-admin.py runserver $DJANGO_ENV_SERVER_ADDR:$DJANGO_ENV_SERVER_PORT
 elif [ -n "$DJANGO_SERVER_PORT" ]; then
-	django-admin.py runserver $DJANGO_SERVER_PORT
+	django-admin.py runserver $DJANGO_ENV_SERVER_PORT
 else
 	django-admin.py runserver
 fi

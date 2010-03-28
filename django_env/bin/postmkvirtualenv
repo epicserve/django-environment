@@ -6,12 +6,20 @@ if [ $IS_DJANGO_ENV == "n" ]; then
 	exit 0
 fi
 
+# setup the Django project directory
+PROJECT_NAME=`basename $VIRTUAL_ENV`
+
+PARENT_DIR_NAME="$PROJECT_NAME.com"
+echo -n "Containing directory for your Django project? [Default: $PARENT_DIR_NAME] "
+read -e PARENT_DIR_NAME_INPUT
+if [ -n "$PARENT_DIR_NAME_INPUT" ]; then
+	PARENT_DIR_NAME=$PARENT_DIR_NAME_INPUT
+fi
+
 # install django
 pip install Django
 
-# setup the Django project directory
-PROJECT_NAME=`basename $VIRTUAL_ENV`
-DJANGO_ENV_PROJECT_DIR="$DJANGO_SITES_ROOT/$PROJECT_NAME.com"
+DJANGO_ENV_PROJECT_DIR="$DJANGO_SITES_ROOT/$PARENT_DIR_NAME"
 mkdir "$DJANGO_ENV_PROJECT_DIR"
 cd "$DJANGO_ENV_PROJECT_DIR"
 django-admin.py startproject $PROJECT_NAME

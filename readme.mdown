@@ -1,29 +1,54 @@
 # Django-environment
 
-A plugin for virtualenv to easily create new django projects or bootstrap existing projects.
+A plugin for virtualenv to easily create new django projects.
 
-This project is currently very experimental so feel free to use it with that understanding.
+## Quick Install Instructions
 
-## Project Goal
-This is the start of the Django-environment project. The idea is to make it as easy as possible to start a new Django-environment for a new project. It's basically a plugin for Python-virtualenv. So the hope is that eventually it will be as easy as running the following to setup a new Django project.
+Install virtualenv and virtualenvwrapper
 
-	$ pip install django-enviroment
-	$ mkvirtualenv mycoolproject
+	$ pip install virtualenv
+	$ pip install virtualenvwrapper
 
-## Install
-Currently it's a little more manual than the above to use Django-environment.
+Add the required environment variable to ~/.profile or ~/.bashrc
 
-First download or clone Django-environment and put the Django-environment anywhere on your hard drive that you want and have access.
+	$ echo 'export DJANGO_SITES_ROOT=$HOME/Sites' >> ~/.profile
+	$ . ~/.profile
 
-You need to install virtualenv first (`pip install virtualenv`) and then you can simply replace `$VIRTUAL_ENV/bin/postactivate` and `$VIRTUAL_ENV/bin/postdeactivate` in the virtualenv for your project with `bin/postactivate` and `bin/postdeactivate` that are in the Django-enviroment directory.
+Clone Django-environment to somewhere like ~/code
 
-You also need to either copy or symlink `bin/runserver` to  `$VIRTUAL_ENV/bin/runserver` in your project virtualenv.
+	$ cd ~/code
+	$ git clone git@github.com:epicserve/django-environment.git
 
-The last step is to add the following settings to your Django settings.py for your project.
+Run the install script
 
-	PROJECT_DIR     = '/home/username/sites/example.com' # The root directory where your project is saved
-	PKG_DIR_LIST    = ['%s/third_party' % PROJECT_DIR]   # List of additional package directories you want to add to the python path
-	SETTINGS_MODULE = 'example.config.settings'          # The python path to your django settings
-	SERVER_ADDR     = '127.0.0.1'                        # Django Dev Server address (Not Required)
-	SERVER_PORT     = '8088'                             # Django Dev Server port (Not Required)
-	FABFILE         = '%s/bin/fabfile.py' % PROJECT_DIR  # Path to your fabric fabfile (Not Required)
+	$ cd ~/code/django-environment/django_env/bin
+	$ ./install
+
+Create a Django-environment
+
+	$ mkvirtualenv --no-site-packages example
+	New python executable in example/bin/python
+	Installing setuptools............done.
+	Is this a Django-enviroment your creating (y/n)? y
+	Containing directory for your Django project? [Default: example.com] 
+	Downloading/unpacking Django
+	  Downloading Django-1.1.1.tar.gz (5.6Mb): 5.6Mb downloaded
+	  Running setup.py egg_info for package Django
+	Installing collected packages: Django
+	  Running setup.py install for Django
+	    changing mode of build/scripts-2.6/django-admin.py from 644 to 755
+	    changing mode of /Users/oconnor/.virtualenvs/example/bin/django-admin.py to 755
+	Successfully installed Django
+
+	Your Django-environment "example" has been activated.
+
+	Django-environment Commands:
+	runserver      Starts the Django development server 
+	deactivate     Deactivates the current Django-environment 
+	workon <name>  Work on a different Django-environment
+
+	(example)$
+
+Start the development server for your new project
+
+	$ runserver

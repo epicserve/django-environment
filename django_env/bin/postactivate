@@ -42,11 +42,15 @@ fi
 if [ -n "$DJANGO_ENV_FABFILE" ]; then
 	alias fab="fab -f $DJANGO_ENV_FABFILE"
 	DJANGO_ENV_ACTIVATED_MSG="$DJANGO_ENV_ACTIVATED_MSG 
-fab <command>  Run fabric commands according to your Django DJANGO_ENV_FABFILE setting"
+fab <command>  Run fabric commands in your fabfile.py for this Django project."
 
 fi
-	
-cd $DJANGO_ENV_PROJECT_DIR
+
+# Make an alias so you can easily cd to your project directory
+alias cddjango_project="cd $DJANGO_ENV_PROJECT_DIR"
+
+cddjango_project
+
 echo "
 $DJANGO_ENV_ACTIVATED_MSG
 "

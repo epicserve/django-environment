@@ -20,6 +20,12 @@ def get_path(var_name):
 
 if __name__ == '__main__':
 	
-	exec "from %s.config import local_settings as settings" % project_name
+	try:
+		exec "from %s.config import local_settings as settings" % project_name
+	except ImportError:
+		try:
+			exec "from config import local_settings as settings"
+		except ImportError:
+			exec "import local_settings as settings"
 	
 	locals()[sys.argv[1]](sys.argv[2])

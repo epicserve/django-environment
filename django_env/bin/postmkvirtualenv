@@ -26,7 +26,7 @@ echo -n "Create a blank Fabric fabfile in your project (y/n)? "
 read -e CREATE_FABFILE
 
 # install Django
-pip install /Users/oconnor/code/git/django-environment/Django-1.1.1.tar.gz
+pip install Django
 
 # Setup the Django project
 DJANGO_ENV_PROJECT_DIR="$DJANGO_SITES_ROOT/$PARENT_DIR_NAME"

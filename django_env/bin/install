@@ -19,9 +19,9 @@ exit 1
 
 fi
 
-
-cd ../
-ln -sf `pwd` "$WORKON_HOME/django_env"
+django_env_dir=$(cd $(dirname "$0"); pwd)
+django_env_dir=`dirname $django_env_dir`
+ln -sf $django_env_dir "$WORKON_HOME/django_env"
 
 echo -e '\n\nsource $WORKON_HOME/django_env/bin/postmkvirtualenv\n' >> "$WORKON_HOME/postmkvirtualenv"
 

@@ -74,7 +74,7 @@ echo "$SETTINGS" > settings.py
 
 # symlink all bin files
 ln -s $WORKON_HOME/django_env/bin/runserver $VIRTUAL_ENV/bin/runserver
-ln -s $WORKON_HOME/django_env/utils/django_settings.py $VIRTUAL_ENV/bin/django_settings.py
+ln -s $WORKON_HOME/django_env/utils/get_django_env_settings.py $VIRTUAL_ENV/bin/get_django_env_settings.py
 
 # add the postactivate and postdeactivate hooks
 echo '

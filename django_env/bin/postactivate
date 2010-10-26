@@ -9,11 +9,11 @@
 
 # this is needed so you can load your Django settings
 
-DJANGO_ENV_PROJECT_DIR=$(django_settings.py get_var DJANGO_ENV_PROJECT_DIR)
-DJANGO_SETTINGS_MODULE=$(django_settings.py get_var DJANGO_ENV_SETTINGS_MODULE)
-DJANGO_ENV_SERVER_ADDR=$(django_settings.py get_var DJANGO_ENV_SERVER_ADDR)
-DJANGO_ENV_SERVER_PORT=$(django_settings.py get_var DJANGO_ENV_SERVER_PORT)
-DJANGO_ENV_FABFILE=$(django_settings.py get_var DJANGO_ENV_FABFILE)
+DJANGO_ENV_PROJECT_DIR=$(get_django_env_settings.py get_var DJANGO_ENV_PROJECT_DIR)
+DJANGO_SETTINGS_MODULE=$(get_django_env_settings.py get_var DJANGO_ENV_SETTINGS_MODULE)
+DJANGO_ENV_SERVER_ADDR=$(get_django_env_settings.py get_var DJANGO_ENV_SERVER_ADDR)
+DJANGO_ENV_SERVER_PORT=$(get_django_env_settings.py get_var DJANGO_ENV_SERVER_PORT)
+DJANGO_ENV_FABFILE=$(get_django_env_settings.py get_var DJANGO_ENV_FABFILE)
 DJANGO_ENV_ACTIVATED_MSG='Your Django-environment "'`basename $VIRTUAL_ENV`'" has been activated.
 
 Django-environment Commands:

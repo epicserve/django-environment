@@ -13,7 +13,7 @@ fi
 PROJECT_NAME=`basename $VIRTUAL_ENV`
 
 CONFIG_PATH="$PROJECT_NAME.config"
-echo -n "Enter the python path to the config directory (i.e. Where your settings.py, manage.py and urls will go). Use just . if you want the config files in your current project root. [Default: $CONFIG_PATH] "
+echo -n "Enter the python path to the config directory (i.e. Where your settings.py, manage.py and urls.py will go). Use a period (.) if you want the config files in your current project root. [Default: $CONFIG_PATH] "
 read -e CONFIG_PATH_INPUT
 if [ -n "$CONFIG_PATH_INPUT" ]; then
     CONFIG_PATH=$CONFIG_PATH_INPUT
@@ -33,7 +33,7 @@ if [ -n "$CREATE_FABFILE_INPUT" ]; then
 fi
 
 # install Django
-pip install ~/Downloads/Django-1.2.3.tar.gz
+pip install django
 
 # Setup the Django project
 DJANGO_ENV_PROJECT_DIR=`pwd`

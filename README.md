@@ -77,3 +77,9 @@ Start the development server for your new project.
 	$ runserver
 
 The previous command should give you an output like the following. Now if you go to the URL it gives you in your browser you should get the Django "It worked!" page. Now you're readying to start working on your new Django website.
+
+    0 errors found
+
+    Django version 1.2.3, using settings 'example.config.settings'
+    Development server is running at http://127.0.0.1:8000/
+    Quit the server with CONTROL-C.

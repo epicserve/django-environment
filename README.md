@@ -12,7 +12,7 @@ Install virtualenv and virtualenvwrapper
 Clone Django-environment to somewhere like ~/code
 
 	$ cd ~/code
-	$ git clone git@github.com:epicserve/django-environment.git
+	$ git clone http://github.com/epicserve/django-environment.git
 
 Run the install script
 

@@ -1,6 +1,6 @@
 # Django-environment
 
-A plugin for virtualenv and virtualenvwrapper to easily create new django projects.
+A plugin for virtualenvwrapper that makes setting up and creating new Django environments easier.
 
 ## Quick Install Instructions
 

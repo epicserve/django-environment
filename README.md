@@ -4,20 +4,10 @@ A plugin for virtualenvwrapper that makes setting up and creating new Django env
 
 ## Quick Install Instructions
 
-Install virtualenv and virtualenvwrapper
+Pip install django-environment
 
-	$ pip install virtualenv
-	$ pip install virtualenvwrapper
-
-Clone Django-environment to somewhere like ~/code
-
-	$ cd ~/code
-	$ git clone http://github.com/epicserve/django-environment.git
-
-Run the install script
-
-	$ cd ~/code/django-environment/django_env/bin
-	$ ./install
+    $ pip install -e git://github.com/epicserve/django-environment.git@setup_script#egg=django-environment
+    $ python -c "from django_env.bin import install; install.main();"
 
 Optionally you can make the `--no-site-packages` argument the default argument when making a new virtual environment. Edit your `~/.profile` or `~/.bashrc` to add the following alias.
 

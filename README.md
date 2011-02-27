@@ -17,9 +17,9 @@ Optionally you can make the `--no-site-packages` argument the default argument w
 
 1. Create your container directory for your project. For example if you're working on the website example.com you might want to create a container directory called "example.com" in your home `~/Sites` directory.
 
-    $ cd ~/Sites
-    $ mkdir example.com
-    $ cd example.com
+        $ cd ~/Sites
+        $ mkdir example.com
+        $ cd example.com
 
 2. Next you create your virtual environment and add your initial Django configuration files inside your Django project container directory or inside the Django project root directory.
 

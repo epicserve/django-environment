@@ -25,7 +25,7 @@ Optionally you can make the `--no-site-packages` argument the default argument w
 
 Run the `mkvirtualenv` command followed by the name you want to give your virtual environment. This is usually just an abbreviation of your website or your website domain name without the [TLD](http://en.wikipedia.org/wiki/Top-level_domain) extension.
 
-    $ mkvirtualevn --no-site-packages example
+    $ mkvirtualenv --no-site-packages example
 
 The previous command should give you an output like the following. Just answer all the prompts and when it finishes you should have a newly setup Django environment. Pay close attention to the question about the path to your config directory. The default setting should work well for most people.
 

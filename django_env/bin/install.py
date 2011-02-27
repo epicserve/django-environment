@@ -16,9 +16,17 @@ def main():
     os.system(command)
 
     # add the ejango_env postmkvirtualenv hook to the virtualenvwrapper postmkvirtualenv hook
-    command = "echo '\n\nsource $WORKON_HOME/django_env/bin/postmkvirtualenv\n' >> \"$WORKON_HOME/postmkvirtualenv\""
-    os.system(command)
-    
+    postmkvirtualenv_cmd = 'source $WORKON_HOME/django_env/bin/postmkvirtualenv'
+    workon_home = os.getenv('WORKON_HOME')
+    postmkvirtualenv_path = "%s/postmkvirtualenv" % workon_home
+    fh = open(postmkvirtualenv_path, "r")
+    contents = fh.read()
+    fh.close()
+    if contents.find(postmkvirtualenv_cmd) == -1:
+        fh = open(postmkvirtualenv_path, "a")
+        fh.write("\n\n%s\n\n" % postmkvirtualenv_cmd)
+        fh.close()
+
     print """
 
 Django-environment is now installed. To create a django-environment run

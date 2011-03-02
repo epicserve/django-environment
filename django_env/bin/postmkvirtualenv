@@ -1,3 +1,7 @@
+DJANGO_BASE_SIT_URL='git://github.com/epicserve/django-base-site.git'
+DJANGO_SRC_URL='/Users/oconnor/Downloads/Django-1.2.5.tar.gz'
+USE_DEFAULTS='Y'
+
 # Check to see if the user wants to install a Django environment
 echo -n "Is this a Django-enviroment your creating (y/n)? [Default: y] "
 read -e IS_DJANGO_ENV
@@ -13,55 +17,77 @@ fi
 PROJECT_NAME=`basename $VIRTUAL_ENV`
 
 CONFIG_PATH="$PROJECT_NAME.config"
-echo -n "Enter the python path to the config directory (i.e. Where your settings.py, manage.py and urls.py will go). Use a period (.) if you want the config files in your current project root. [Default: $CONFIG_PATH] "
-read -e CONFIG_PATH_INPUT
+if [ "$USE_DEFAULTS" != "Y" ]; then
+    echo -n "Enter the python path to the config directory (i.e. Where your settings.py, manage.py and urls.py will go). Use a period (.) if you want the config files in your current project root. [Default: $CONFIG_PATH] "
+    read -e CONFIG_PATH_INPUT
+fi
 if [ -n "$CONFIG_PATH_INPUT" ]; then
     CONFIG_PATH=$CONFIG_PATH_INPUT
 fi
 
-echo -n "Development server address? [Default: 127.0.0.1] "
-read -e SERVER_ADDR_INPUT
+if [ "$USE_DEFAULTS" != "Y" ]; then
+    echo -n "Development server address? [Default: 127.0.0.1] "
+    read -e SERVER_ADDR_INPUT
+fi
 
-echo -n "Development server address? [Default: 8000] "
-read -e SERVER_PORT_INPUT
+if [ "$USE_DEFAULTS" != "Y" ]; then
+    echo -n "Development server address? [Default: 8000] "
+    read -e SERVER_PORT_INPUT
+fi
 
-echo -n "Create a blank Fabric fabfile in your project (y/n)? [Default: y] "
-read -e CREATE_FABFILE_INPUT
+if [ "$USE_DEFAULTS" != "Y" ]; then
+    echo -n "Create a blank Fabric fabfile in your project (y/n)? [Default: y] "
+    read -e CREATE_FABFILE_INPUT
+fi
 CREATE_FABFILE="y"
 if [ -n "$CREATE_FABFILE_INPUT" ]; then
     CREATE_FABFILE=$CREATE_FABFILE_INPUT
 fi
 
 # install Django
-pip install django
+if [ -n "$DJANGO_SRC_URL" ]; then
+    pip install $DJANGO_SRC_URL
+else
+    pip install django
+fi
 
 # Setup the Django project
 DJANGO_ENV_PROJECT_DIR=`pwd`
-django-admin.py startproject temp
-
-SETTINGS_MODULE="$PROJECT_NAME\.config\.settings"
-FABFILE_LOCATION="$DJANGO_ENV_PROJECT_DIR/$PROJECT_NAME/config/fabfile.py"
-SETTINGS_PATH="$DJANGO_ENV_PROJECT_DIR/$PROJECT_NAME/config/settings.py"
-ROOT_URLCONF="$PROJECT_NAME\.config\.urls"
-if [ "$CONFIG_PATH_INPUT" == "." ]; then
-    FABFILE_LOCATION="`pwd`/fabfile.py"
-    SETTINGS_PATH="`pwd`/settings.py"
-    ROOT_URLCONF="urls"
-    SETTINGS_MODULE="settings"
-    mv temp/* `pwd`
-    rm -rf temp
-else
+if [ -n "$DJANGO_BASE_SIT_URL" ]; then
     SHELLPATH=`echo $CONFIG_PATH | perl -wpe "s/\./\//g"`
     FABFILE_LOCATION="$SHELLPATH/fabfile.py"
     SETTINGS_PATH="$SHELLPATH/settings.py"
     ROOT_URLCONF="$CONFIG_PATH.urls"
+    SETTINGS_MODULE="$CONFIG_PATH.settings"    
+    git clone $DJANGO_BASE_SIT_URL temp
+    mv temp/* $DJANGO_ENV_PROJECT_DIR
+    rm -rf .git
     SETTINGS_MODULE="$CONFIG_PATH.settings"
-    mkdir -p $SHELLPATH
-    cp temp/* $SHELLPATH/
-    find . -type d -exec touch {}/__init__.py \;
-    rm __init__.py
-    rm -rf temp
+    ROOT_URLCONF="$CONFIG_PATH.urls"
+else
+    django-admin.py startproject temp
+    if [ "$CONFIG_PATH_INPUT" == "." ]; then
+        FABFILE_LOCATION="`pwd`/fabfile.py"
+        SETTINGS_PATH="`pwd`/settings.py"
+        ROOT_URLCONF="urls"
+        SETTINGS_MODULE="settings"
+        mv temp/* `pwd`
+        rm -rf temp
+    else
+        SHELLPATH=`echo $CONFIG_PATH | perl -wpe "s/\./\//g"`
+        FABFILE_LOCATION="$SHELLPATH/fabfile.py"
+        SETTINGS_PATH="$SHELLPATH/settings.py"
+        ROOT_URLCONF="$CONFIG_PATH.urls"
+        SETTINGS_MODULE="$CONFIG_PATH.settings"
+        mkdir -p $SHELLPATH
+        cp temp/* $SHELLPATH/
+        find . -type d -exec touch {}/__init__.py \;
+        rm __init__.py
+        rm -rf temp
+    fi
 fi
+
+
 
 
 # Setup the django_env_settings.py

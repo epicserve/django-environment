@@ -18,7 +18,7 @@ def main():
     # add the ejango_env postmkvirtualenv hook to the virtualenvwrapper postmkvirtualenv hook
     postmkvirtualenv_cmd = 'source $WORKON_HOME/django_env/bin/postmkvirtualenv'
     workon_home = os.getenv('WORKON_HOME')
-    postmkvirtualenv_path = "%s/postmkvirtualenv" % workon_home
+    postmkvirtualenv_path = os.path.join(workon_home, 'postmkvirtualenv')
     fh = open(postmkvirtualenv_path, "r")
     contents = fh.read()
     fh.close()

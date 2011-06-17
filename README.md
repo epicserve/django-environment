@@ -13,6 +13,45 @@ Optionally you can make the `--no-site-packages` argument the default argument w
 
     alias mkvirtualenv="mkvirtualenv --no-site-packages"
 
+## Optional Config Settings
+
+You can add optional settings that can change the default install behavior. One of the best settings is that with `DJANGO_BASE_SIT_URL`, if you have a Django base site on Github you can have Django-environment setup a new environment using your own custom base site!
+
+To setup and use the optional config settings, all you need to do is add the file `~/.django_env_config` with any of the following settings. Alternatively, if you would prefer to put your config file somewhere else, then all you need to do is something like, `export DJANGO_ENV_CONFIG_PATH=/Users/username/.dotfiles/django_env_config` in your `~/.profile` or `~/.bashrc` (depending on your OS).
+
+    # Controls whether or not to prompt the user during the setup of a new environment. Use N for No or Y for Yes.
+    USE_DEFAULTS="N"
+
+    # Controls whether or not to create a basic default fabfile template.
+    CREATE_FABFILE="Y"
+
+    # Sets the URL to use when pip installs Django. If blank Django will be
+    # installed using, "pip install django". If you want to save download time
+    # you could use something like, "/usr/local/src/django/Django-1.3.tar.gz"
+    # to use a local tar gzipped version.
+    DJANGO_SRC_URL=""
+
+    # Use this setting to set the url of a Django base site. Currently
+    # Django-environment has only been tested with Github.
+    # Example: git://github.com/epicserve/django-base-site.git
+    DJANGO_BASE_SIT_URL=""
+    
+    # Use this setting to change the default Django CONFIG_PATH.
+    CONFIG_PATH="config"
+
+    # Change the default Django development server address.
+    SERVER_ADDR="127.0.0.1"
+
+    # Change the default Django development server port.
+    SERVER_PORT="8000"
+
+    # If you Django base site has requirement files you can have
+    # Django-environment install your pip requirements after your new
+    # environment is installed.
+    # Example: POST_PIP_CMD="install -r config/requirements.txt -r config/dev-requirements.txt"
+    POST_PIP_CMD=""
+
+
 ## Create a new Django Environment for a Project
 
 1. Create your container directory for your project. For example if you're working on the website example.com you might want to create a container directory called "example.com" in your home `~/Sites` directory.

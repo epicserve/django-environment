@@ -1,6 +1,23 @@
-DJANGO_BASE_SIT_URL='git://github.com/epicserve/django-base-site.git'
-DJANGO_SRC_URL='/Users/oconnor/Downloads/Django-1.2.5.tar.gz'
-USE_DEFAULTS='Y'
+
+# DEFUALT SETTINGS
+PROJECT_NAME=`basename $VIRTUAL_ENV`
+USE_DEFAULTS="N"
+CREATE_FABFILE="y"
+DJANGO_SRC_URL=""
+DJANGO_BASE_SIT_URL=""
+CONFIG_PATH="$PROJECT_NAME.config"
+SERVER_ADDR="127.0.0.1"
+SERVER_PORT="8000"
+POST_PIP_CMD=""
+
+# If the DJANGO_ENV_CONFIG_PATH environment variable is set then source it's
+# path, else if the defualt django_env_config file exits source the file. The
+# loaded settings file overrides any of the default settings.
+if [[ -n "$DJANGO_ENV_CONFIG_PATH" ]]; then
+    source $DJANGO_ENV_CONFIG_PATH
+elif [[ -f ~/.django_env_config ]]; then
+    source ~/.django_env_config
+fi
 
 # Check to see if the user wants to install a Django environment
 echo -n "Is this a Django-enviroment your creating (y/n)? [Default: y] "
@@ -13,10 +30,6 @@ if [ $IS_DJANGO_ENV == "n" ]; then
     exit 0
 fi
 
-# setup the Django project directory and ask question about the Django project
-PROJECT_NAME=`basename $VIRTUAL_ENV`
-
-CONFIG_PATH="$PROJECT_NAME.config"
 if [ "$USE_DEFAULTS" != "Y" ]; then
     echo -n "Enter the python path to the config directory (i.e. Where your settings.py, manage.py and urls.py will go). Use a period (.) if you want the config files in your current project root. [Default: $CONFIG_PATH] "
     read -e CONFIG_PATH_INPUT
@@ -26,12 +39,12 @@ if [ -n "$CONFIG_PATH_INPUT" ]; then
 fi
 
 if [ "$USE_DEFAULTS" != "Y" ]; then
-    echo -n "Development server address? [Default: 127.0.0.1] "
+    echo -n "Development server address? [Default: $SERVER_ADDR] "
     read -e SERVER_ADDR_INPUT
 fi
 
 if [ "$USE_DEFAULTS" != "Y" ]; then
-    echo -n "Development server address? [Default: 8000] "
+    echo -n "Development server address? [Default: $SERVER_PORT] "
     read -e SERVER_PORT_INPUT
 fi
 
@@ -39,7 +52,6 @@ if [ "$USE_DEFAULTS" != "Y" ]; then
     echo -n "Create a blank Fabric fabfile in your project (y/n)? [Default: y] "
     read -e CREATE_FABFILE_INPUT
 fi
-CREATE_FABFILE="y"
 if [ -n "$CREATE_FABFILE_INPUT" ]; then
     CREATE_FABFILE=$CREATE_FABFILE_INPUT
 fi
@@ -60,19 +72,20 @@ if [ -n "$DJANGO_BASE_SIT_URL" ]; then
     ROOT_URLCONF="$CONFIG_PATH.urls"
     SETTINGS_MODULE="$CONFIG_PATH.settings"    
     git clone $DJANGO_BASE_SIT_URL temp
-    mv temp/* $DJANGO_ENV_PROJECT_DIR
-    rm -rf .git
+    mv $DJANGO_ENV_PROJECT_DIR/temp/* $DJANGO_ENV_PROJECT_DIR
+    rm -rf "$DJANGO_ENV_PROJECT_DIR/.git"
+    rm -rf "$DJANGO_ENV_PROJECT_DIR/temp/"
     SETTINGS_MODULE="$CONFIG_PATH.settings"
     ROOT_URLCONF="$CONFIG_PATH.urls"
 else
     django-admin.py startproject temp
-    if [ "$CONFIG_PATH_INPUT" == "." ]; then
-        FABFILE_LOCATION="`pwd`/fabfile.py"
-        SETTINGS_PATH="`pwd`/settings.py"
+    if [ "$CONFIG_PATH" == "." ]; then
+        FABFILE_LOCATION="$DJANGO_ENV_PROJECT_DIR/fabfile.py"
+        SETTINGS_PATH="$DJANGO_ENV_PROJECT_DIR/settings.py"
         ROOT_URLCONF="urls"
         SETTINGS_MODULE="settings"
-        mv temp/* `pwd`
-        rm -rf temp
+        mv $DJANGO_ENV_PROJECT_DIR/temp/* $DJANGO_ENV_PROJECT_DIR
+        rm -rf "$DJANGO_ENV_PROJECT_DIR/temp/"
     else
         SHELLPATH=`echo $CONFIG_PATH | perl -wpe "s/\./\//g"`
         FABFILE_LOCATION="$SHELLPATH/fabfile.py"
@@ -80,10 +93,10 @@ else
         ROOT_URLCONF="$CONFIG_PATH.urls"
         SETTINGS_MODULE="$CONFIG_PATH.settings"
         mkdir -p $SHELLPATH
-        cp temp/* $SHELLPATH/
+        cp $DJANGO_ENV_PROJECT_DIR/temp/* $SHELLPATH/
         find . -type d -exec touch {}/__init__.py \;
-        rm __init__.py
-        rm -rf temp
+        rm $DJANGO_ENV_PROJECT_DIR/__init__.py
+        rm -rf $DJANGO_ENV_PROJECT_DIR/temp
     fi
 fi
 
@@ -106,7 +119,7 @@ if [ -n "$SERVER_PORT_INPUT" ]; then
     perl -i -wpe "s/# DJANGO_ENV_SERVER_PORT/DJANGO_ENV_SERVER_PORT  /g" $LOCAL_SETTINGS_TARGET
 fi
 perl -i -wpe "s|{{ FABFILE }}|$FABFILE_LOCATION|g" $LOCAL_SETTINGS_TARGET
-if [ "$CREATE_FABFILE" == "y" ]; then
+if [ "$CREATE_FABFILE" == "Y" ]; then
     FABFILE=`cat $WORKON_HOME/django_env/config/empty_fabfile.txt`
     echo "$FABFILE" > $FABFILE_LOCATION
 fi
@@ -137,3 +150,7 @@ add2virtualenv $DJANGO_ENV_PROJECT_DIR
 
 # source the Django-environment postactivate script
 source "$WORKON_HOME/django_env/bin/postactivate"
+
+if [ -n "$POST_PIP_CMD" ]; then
+    pip $POST_PIP_CMD
+fi

@@ -4,7 +4,7 @@ PROJECT_NAME=`basename $VIRTUAL_ENV`
 USE_DEFAULTS="N"
 CREATE_FABFILE="y"
 DJANGO_SRC_URL=""
-DJANGO_BASE_SIT_URL=""
+DJANGO_BASE_SITE_URL=""
 CONFIG_PATH="$PROJECT_NAME.config"
 SERVER_ADDR="127.0.0.1"
 SERVER_PORT="8000"
@@ -65,13 +65,13 @@ fi
 
 # Setup the Django project
 DJANGO_ENV_PROJECT_DIR=`pwd`
-if [ -n "$DJANGO_BASE_SIT_URL" ]; then
+if [ -n "$DJANGO_BASE_SITE_URL" ]; then
     SHELLPATH=`echo $CONFIG_PATH | perl -wpe "s/\./\//g"`
     FABFILE_LOCATION="$SHELLPATH/fabfile.py"
     SETTINGS_PATH="$SHELLPATH/settings.py"
     ROOT_URLCONF="$CONFIG_PATH.urls"
     SETTINGS_MODULE="$CONFIG_PATH.settings"    
-    git clone $DJANGO_BASE_SIT_URL temp
+    git clone $DJANGO_BASE_SITE_URL temp
     mv $DJANGO_ENV_PROJECT_DIR/temp/* $DJANGO_ENV_PROJECT_DIR
     rm -rf "$DJANGO_ENV_PROJECT_DIR/.git"
     rm -rf "$DJANGO_ENV_PROJECT_DIR/temp/"

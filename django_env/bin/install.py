@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 
-import sys, os
+import sys
+import os
 
 
 def main():

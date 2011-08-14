@@ -9,6 +9,7 @@ CONFIG_PATH="$PROJECT_NAME.config"
 SERVER_ADDR="127.0.0.1"
 SERVER_PORT="8000"
 POST_PIP_CMD=""
+RUN_SYNCDB="N"
 
 # If the DJANGO_ENV_CONFIG_PATH environment variable is set then source it's
 # path, else if the defualt django_env_config file exits source the file. The
@@ -151,6 +152,12 @@ add2virtualenv $DJANGO_ENV_PROJECT_DIR
 # Install any requirements using PIP
 if [ -n "$POST_PIP_CMD" ]; then
     pip $POST_PIP_CMD
+fi
+
+# Run SYNCDB
+if [ "$RUN_SYNCDB" == "Y" ]; then
+    export DJANGO_SETTINGS_MODULE="$CONFIG_PATH.settings"
+    django-admin.py syncdb
 fi
 
 # source the Django-environment postactivate script

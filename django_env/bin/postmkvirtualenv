@@ -70,7 +70,7 @@ if [ -n "$DJANGO_BASE_SITE_URL" ]; then
     FABFILE_LOCATION="$SHELLPATH/fabfile.py"
     SETTINGS_PATH="$SHELLPATH/settings.py"
     ROOT_URLCONF="$CONFIG_PATH.urls"
-    SETTINGS_MODULE="$CONFIG_PATH.settings"    
+    SETTINGS_MODULE="$CONFIG_PATH.settings"
     git clone $DJANGO_BASE_SITE_URL temp
     mv $DJANGO_ENV_PROJECT_DIR/temp/* $DJANGO_ENV_PROJECT_DIR
     rm -rf "$DJANGO_ENV_PROJECT_DIR/.git"
@@ -148,9 +148,11 @@ perl -i -wpe "s/temp\.urls/$ROOT_URLCONF/g" $SETTINGS_PATH
 # add all paths to the PYTHONPATH
 add2virtualenv $DJANGO_ENV_PROJECT_DIR
 
-# source the Django-environment postactivate script
-source "$WORKON_HOME/django_env/bin/postactivate"
-
+# Install any requirements using PIP
 if [ -n "$POST_PIP_CMD" ]; then
     pip $POST_PIP_CMD
 fi
+
+# source the Django-environment postactivate script
+source "$WORKON_HOME/django_env/bin/postactivate"
+

@@ -15,7 +15,7 @@ Optionally you can make the `--no-site-packages` argument the default argument w
 
 ## Optional Config Settings
 
-You can add optional settings that can change the default install behavior. One of the best settings is `DJANGO_BASE_SITE_URL`, if you have a Django base site on Github, Bitbucket or any GIT, HG or SVN repository, you can have Django-environment setup a new environment using your own custom base site!
+You can add optional settings that can change the default install behavior. One of the best settings is `DJANGO_BASE_SITE_URL`, if you have a Django base site on your local file system, Github, Bitbucket or any GIT, HG or SVN repository, you can have Django-environment setup a new environment using your own custom base site!
 
 To setup and use the optional config settings, all you need to do is add the file `~/.django_env_config` with any of the following settings. Alternatively, if you would prefer to put your config file somewhere else, then all you need to do is something like, `export DJANGO_ENV_CONFIG_PATH=/Users/username/.dotfiles/django_env_config` in your `~/.profile` or `~/.bashrc` (depending on your OS).
 
@@ -39,6 +39,7 @@ To setup and use the optional config settings, all you need to do is add the fil
     # git+git://github.com/epicserve/django-base-site.git
     # hg+https://epicserve@bitbucket.org/epicserve/django-base-site
     # svn+ssh://user@ssh.yourdomain.com/path/to/django-base-site/trunk
+    # file:///Users/username/code/django/django-base-site
     DJANGO_BASE_SITE_URL=""
 
     # Use this setting to change the default Django CONFIG_PATH.

@@ -1,6 +1,8 @@
 from setuptools import setup
 import os
 
+# OS X: prevent 'tar' from including resource forks ("._*" files)
+os.environ['COPYFILE_DISABLE'] = 'true'
 
 # Compile the list of packages available, because distutils doesn't have
 # an easy way to do this.

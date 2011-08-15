@@ -72,9 +72,8 @@ if [ -n "$DJANGO_BASE_SITE_URL" ]; then
     SETTINGS_PATH="$SHELLPATH/settings.py"
     ROOT_URLCONF="$CONFIG_PATH.urls"
     SETTINGS_MODULE="$CONFIG_PATH.settings"
-    git clone $DJANGO_BASE_SITE_URL temp
+    $WORKON_HOME/django_env/utils/vcs.py $DJANGO_BASE_SITE_URL `pwd`/temp
     mv $DJANGO_ENV_PROJECT_DIR/temp/* $DJANGO_ENV_PROJECT_DIR
-    rm -rf "$DJANGO_ENV_PROJECT_DIR/.git"
     rm -rf "$DJANGO_ENV_PROJECT_DIR/temp/"
     SETTINGS_MODULE="$CONFIG_PATH.settings"
     ROOT_URLCONF="$CONFIG_PATH.urls"

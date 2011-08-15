@@ -38,6 +38,8 @@ def main():
             shutil.rmtree(hg_dir)
 
     if scheme == "svn":
+        if vcs_scheme_url.startswith('svn+ssh'):
+            url = vcs_scheme_url
         call(["svn", "export", url, target_dir])
 
 

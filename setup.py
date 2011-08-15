@@ -1,8 +1,25 @@
-#!/usr/bin/env python
-
-
 from distutils.core import setup
+import os
 
+
+# Compile the list of packages available, because distutils doesn't have
+# an easy way to do this.
+packages, data_files = [], []
+for dirpath, dirnames, filenames in os.walk('django_env'):
+    # Ignore dirnames that start with '.'
+    for i, dirname in enumerate(dirnames):
+        if dirname.startswith('.'):
+            del dirnames[i]
+    if '__init__.py' in filenames and dirpath != os.path.join('django_env', 'bin'):
+        pkg = dirpath.replace(os.path.sep, '.')
+        if os.path.altsep:
+            pkg = pkg.replace(os.path.altsep, '.')
+        packages.append(pkg)
+    elif filenames:
+        prefix = dirpath[11:]  # Strip "django_env/" or "django_env\"
+        for f in filenames:
+            if not f.endswith('.pyc'):  # ignore pyc files
+                data_files.append(os.path.join(prefix, f))
 
 setup(
     name='django-environment',
@@ -13,10 +30,8 @@ setup(
     author_email='epicserve@gmail.com',
     url='http://github.com/epicserve/django-environment',
     install_requires=['virtualenvwrapper'],
-    packages=['django_env'],
-    package_data={
-        "django_env": ['bin/*', 'config/*', 'utils/*'],
-    },
+    packages=packages,
+    package_data={'django_env': data_files},
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',

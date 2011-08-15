@@ -15,7 +15,7 @@ Optionally you can make the `--no-site-packages` argument the default argument w
 
 ## Optional Config Settings
 
-You can add optional settings that can change the default install behavior. One of the best settings is that with `DJANGO_BASE_SITE_URL`, if you have a Django base site on Github you can have Django-environment setup a new environment using your own custom base site!
+You can add optional settings that can change the default install behavior. One of the best settings is `DJANGO_BASE_SITE_URL`, if you have a Django base site on Github, Bitbucket or any GIT, HG or SVN repository, you can have Django-environment setup a new environment using your own custom base site!
 
 To setup and use the optional config settings, all you need to do is add the file `~/.django_env_config` with any of the following settings. Alternatively, if you would prefer to put your config file somewhere else, then all you need to do is something like, `export DJANGO_ENV_CONFIG_PATH=/Users/username/.dotfiles/django_env_config` in your `~/.profile` or `~/.bashrc` (depending on your OS).
 
@@ -31,11 +31,16 @@ To setup and use the optional config settings, all you need to do is add the fil
     # to use a local tar gzipped version.
     DJANGO_SRC_URL=""
 
-    # Use this setting to set the url of a Django base site. Currently
-    # Django-environment has only been tested with Github.
-    # Example: git://github.com/epicserve/django-base-site.git
+    # Use this setting to set the url of a Django base site. Currently Django-
+    # environment has been tested with Github, Bitbucket and a privately hosted
+    # SVN repository.
+    #
+    # Example URLs:
+    # git+git://github.com/epicserve/django-base-site.git
+    # hg+https://epicserve@bitbucket.org/epicserve/django-base-site
+    # svn+ssh://user@ssh.yourdomain.com/path/to/django-base-site/trunk
     DJANGO_BASE_SITE_URL=""
-    
+
     # Use this setting to change the default Django CONFIG_PATH.
     CONFIG_PATH="config"
 
@@ -74,11 +79,11 @@ The previous command should give you an output like the following. Just answer a
     virtualenvwrapper.user_scripts Creating /Users/username/.virtualenvs/example/bin/postdeactivate
     virtualenvwrapper.user_scripts Creating /Users/username/.virtualenvs/example/bin/preactivate
     virtualenvwrapper.user_scripts Creating /Users/username/.virtualenvs/example/bin/postactivate
-    Is this a Django-enviroment your creating (y/n)? [Default: y] 
-    Enter the python path to the config directory (i.e. Where your settings.py, manage.py and urls will go). Use just . if you want the config files in your current project root. [Default: example.config] 
-    Development server address? [Default: 127.0.0.1] 
-    Development server address? [Default: 8000] 
-    Create a blank Fabric fabfile in your project (y/n)? [Default: y] 
+    Is this a Django-enviroment your creating (y/n)? [Default: y]
+    Enter the python path to the config directory (i.e. Where your settings.py, manage.py and urls will go). Use just . if you want the config files in your current project root. [Default: example.config]
+    Development server address? [Default: 127.0.0.1]
+    Development server address? [Default: 8000]
+    Create a blank Fabric fabfile in your project (y/n)? [Default: y]
     Unpacking /Users/username/Downloads/Django-1.2.3.tar.gz
       Running setup.py egg_info for package from file:///Users/username/Downloads/Django-1.2.3.tar.gz
         warning: no files found matching 'django/dispatch/LICENSE.txt'
@@ -95,8 +100,8 @@ The previous command should give you an output like the following. Just answer a
     Your Django-environment "example" has been activated.
 
     Django-environment Commands:
-    runserver      Starts the Django development server 
-    deactivate     Deactivates the current Django-environment 
+    runserver      Starts the Django development server
+    deactivate     Deactivates the current Django-environment
     workon <name>  Work on a different Django-environment
 
     (example)oconnor@shiny:~/Sites/django_env_test/example.com$

@@ -7,7 +7,7 @@ os.environ['COPYFILE_DISABLE'] = 'true'
 # Compile the list of packages available, because distutils doesn't have
 # an easy way to do this.
 packages, data_files = [], []
-for dirpath, dirnames, filenames in os.walk('django_env'):
+for dirpath, dirnames, filenames in os.walk('django_env', 'virtualenvwrapper'):
     # Ignore dirnames that start with '.'
     for i, dirname in enumerate(dirnames):
         if dirname.startswith('.'):
@@ -43,4 +43,21 @@ setup(
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
+    entry_points={
+        'virtualenvwrapper.post_activate': [
+            'django_env = virtualenvwrapper.django_env:post_activate',
+        ],
+        'virtualenvwrapper.post_activate_source': [
+            'django_env = virtualenvwrapper.django_env:post_activate_source',
+        ],
+        'virtualenvwrapper.post_deactivate': [
+            'django_env = virtualenvwrapper.django_env:post_deactivate',
+        ],
+        'virtualenvwrapper.post_deactivate_source': [
+            'django_env = virtualenvwrapper.django_env:post_deactivate_source',
+        ],
+        'virtualenvwrapper.post_mkvirtualenv': [
+            'django_env = virtualenvwrapper.django_env:post_mkvirtualenv',
+        ],
+    },
 )

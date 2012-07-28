@@ -33,6 +33,7 @@ setup(
     author_email='epicserve@gmail.com',
     url='http://github.com/epicserve/django-environment',
     install_requires=['virtualenvwrapper'],
+    namespace_packages=['virtualenvwrapper'],
     packages=packages,
     package_data={'django_env': data_files},
     classifiers=[

@@ -3,8 +3,19 @@
 import logging
 import os
 import sys
+import imp
 
 log = logging.getLogger(__name__)
+
+
+def findfile(path):
+    """Find the file named path in the sys.path.
+    Returns the full path name if found, None if not found"""
+    for dirname in sys.path:
+        possible = os.path.join(dirname, path)
+        if os.path.isfile(possible):
+            return possible
+    return None
 
 
 def post_activate(args):
@@ -15,14 +26,20 @@ def post_activate_source(args):
 
     # Import the settings needed for Django-environment
     VIRTUAL_ENV = os.getenv('VIRTUAL_ENV')
-    VIRTUAL_ENV_BIN = os.path.join(VIRTUAL_ENV, 'bin')
-    DJANGO_ENV_SETTINGS_FILE = os.path.join(VIRTUAL_ENV_BIN, 'django_env_settings.py')
-    sys.path.append(VIRTUAL_ENV_BIN)
-    try:
-        import django_env_settings
-    except ImportError:
-        print "ERROR: Your Django-environment settings file was missing (%s)." % DJANGO_ENV_SETTINGS_FILE
-        return
+    activate_this = '%s/bin/activate_this.py' % VIRTUAL_ENV
+    execfile(activate_this, dict(__file__=activate_this))
+    settings_path = findfile(os.environ.get('DJANGO_ENV_SETTINGS_FILENAME', '.django_env_settings'))
+
+    if settings_path:
+        django_env_settings = imp.load_source('', settings_path)
+    else:
+        VIRTUAL_ENV_BIN = os.path.join(VIRTUAL_ENV, 'bin')
+        DJANGO_ENV_SETTINGS_FILE = os.path.join(VIRTUAL_ENV_BIN, 'django_env_settings.py')
+
+        try:
+            import django_env_settings
+        except ImportError:
+            return
 
     # Get Django-environment settings to add to shell environment variables
     DJANGO_ENV_PROJECT_DIR = getattr(django_env_settings, 'DJANGO_ENV_PROJECT_DIR', False)
@@ -92,6 +109,8 @@ if [ -n "$(alias | grep 'alias fab')" ]; then
 fi"""
 
 
-
 def post_mkvirtualenv(args):
-    log.info('post_mkvirtualenv ran %s' % args)
+    sys.path.append(os.path.abspath('%s/../django_env/' % os.path.dirname(__file__)))
+    from hooks import postmkvirtualenv
+    PWD = os.getenv('PWD')
+    postmkvirtualenv.main(PWD)

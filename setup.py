@@ -23,6 +23,7 @@ for dirpath, dirnames, filenames in os.walk('django_env', 'virtualenvwrapper'):
             if not f.endswith('.pyc'):  # ignore pyc files
                 data_files.append(os.path.join(prefix, f))
 
+packages.append('virtualenvwrapper')
 setup(
     name='django-environment',
     version=__import__('django_env').__version__,

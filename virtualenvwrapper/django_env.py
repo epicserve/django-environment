@@ -111,6 +111,6 @@ fi"""
 
 def post_mkvirtualenv(args):
     sys.path.append(os.path.abspath('%s/../django_env/' % os.path.dirname(__file__)))
-    from hooks import postmkvirtualenv
+    from django_env.hooks import postmkvirtualenv
     PWD = os.getenv('PWD')
     postmkvirtualenv.main(PWD)

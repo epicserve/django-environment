@@ -46,6 +46,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     entry_points={
+        'console_scripts': ['django_env = django_env.cli.main:main'],
         'virtualenvwrapper.post_activate': [
             'django_env = virtualenvwrapper.django_env:post_activate',
         ],

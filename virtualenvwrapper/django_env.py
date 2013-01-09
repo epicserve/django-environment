@@ -102,7 +102,15 @@ def post_deactivate(args):
 
 
 def post_deactivate_source(args):
+
+    unset_env_var_cmd = ""
+    env_file_path = findfile('.env')
+
+    if env_file_path:
+        unset_env_var_cmd = "for i in `cat %s | egrep '^export (\w+)=(.*)$' | cut -d= -f 1 | sed 's/^export //'`; do unset $i; done" % env_file_path
+
     return """
+    %(unset_env_var_cmd)s
 # remove all enviroment variables prefixed with DJANGO
 if [ -n "$(env | grep DJANGO_ENV)" ]; then
     for i in $(env | grep DJANGO_ENV | perl -lne "s/(django_env[_a-z]+)=.+/\\1/ig; print;"); do unset $i; done
@@ -111,7 +119,7 @@ fi
 # remove the alias to the fabfile.py for this project
 if [ -n "$(alias | grep 'alias fab')" ]; then
     unalias fab
-fi"""
+fi""" % {'unset_env_var_cmd': unset_env_var_cmd}
 
 
 def post_mkvirtualenv(args):

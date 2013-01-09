@@ -29,6 +29,11 @@ def post_activate_source(args):
     activate_this = '%s/bin/activate_this.py' % VIRTUAL_ENV
     execfile(activate_this, dict(__file__=activate_this))
     settings_path = findfile(os.environ.get('DJANGO_ENV_SETTINGS_FILENAME', '.django_env_settings'))
+    env_file_path = findfile('.env')
+    source_env_cmd = ""
+
+    if env_file_path:
+        source_env_cmd = "source %s" % env_file_path
 
     if settings_path:
         django_env_settings = imp.load_source('', settings_path)
@@ -64,7 +69,7 @@ workon <name>  Work on a different Django-environment""" % os.path.basename(VIRT
         print MISSING_SETTINGS_ERROR % ('DJANGO_SETTINGS_MODULE', DJANGO_ENV_SETTINGS_FILE)
 
     SHELL_SOURCE_RETURN = """
-
+%s
 alias cddjango_project="cd %s"
 export DJANGO_ENV_PROJECT_DIR=%s
 export DJANGO_SETTINGS_MODULE=%s
@@ -82,7 +87,7 @@ function runserver {
 }
 
 cddjango_project
-""" % (DJANGO_ENV_PROJECT_DIR, DJANGO_ENV_PROJECT_DIR, DJANGO_SETTINGS_MODULE, DJANGO_ENV_SERVER_ADDR, DJANGO_ENV_SERVER_PORT)
+""" % (source_env_cmd, DJANGO_ENV_PROJECT_DIR, DJANGO_ENV_PROJECT_DIR, DJANGO_SETTINGS_MODULE, DJANGO_ENV_SERVER_ADDR, DJANGO_ENV_SERVER_PORT)
 
     if DJANGO_ENV_FABFILE:
         SHELL_SOURCE_RETURN += 'alias fab="fab -f %s"' % DJANGO_ENV_FABFILE
